@@ -11,24 +11,24 @@ describe PuppetVagrant::Box do
     allow_message_expectations_on_nil
     allow($?).to receive(:exitstatus).and_return(0)
     allow(manifest).to receive(:module_path).and_return('modules/')
-    allow(manifest).to receive(:path).and_return('manifest_to_apply.pp')
+    allow(manifest).to receive(:code).and_return('include some_manifest')
   end
 
   describe '#apply' do
 
     it 'successfully applies a manifest to the box' do
-      expect(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/ /vagrant/manifest_to_apply.pp').and_return(0)
+      expect(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/',  {:stdin=>"include some_manifest"}).and_return(0)
       box.apply(manifest)
     end
 
     it 'successfully applies a manifest to the box and deals with weird exit codes' do
-      expect(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/ /vagrant/manifest_to_apply.pp').and_return(2)
+      expect(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/',  {:stdin=>"include some_manifest"}).and_return(2)
       box.apply(manifest)
     end
     
 
     it 'raises a PuppetVagrant::PuppetApplyFailed error if the puppet apply fails' do
-      expect(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/ /vagrant/manifest_to_apply.pp').and_return(1)
+      expect(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/',  {:stdin=>"include some_manifest"}).and_return(1)
       expect{box.apply(manifest)}.to raise_error(PuppetVagrant::PuppetApplyFailed)
     end
   end
@@ -50,6 +50,11 @@ describe PuppetVagrant::Box do
       allow($?).to receive(:exitstatus).and_return(1)
 
       expect(box.run_command('foo')).to eql(1)
+    end
+
+    it 'pipes stdin to the command if given' do
+      expect(box).to receive(:system).with('echo \'something\' | vagrant ssh default --command "some_command"')
+      box.run_command('some_command', :stdin => "something")
     end
   end
 

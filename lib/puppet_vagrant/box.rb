@@ -9,21 +9,16 @@ module PuppetVagrant
     attr_reader :name
 
     def apply(manifest)
-      run_puppet_command("sudo puppet apply --detailed-exitcode --modulepath #{@project_mount_point}/#{manifest.module_path} #{@project_mount_point}/#{manifest.path}")
-    end
-
-
-    def run_command(command)
-      system "vagrant ssh #{@name} --command \"#{command}\""
-      $?.exitstatus
-    end
-  
-    private
-
-    def run_puppet_command(command)
-      exit_code = run_command(command)
+      exit_code = run_command("sudo puppet apply --detailed-exitcode --modulepath #{@project_mount_point}/#{manifest.module_path}", :stdin => manifest.code)
       raise PuppetApplyFailed unless exit_code == 0 or exit_code == 2
     end
 
+
+    def run_command(command, opts = {})
+      stdin = opts[:stdin] ? "echo '#{opts[:stdin]}' | " : ""
+      system "#{stdin}vagrant ssh #{@name} --command \"#{command}\""
+      $?.exitstatus
+    end
+  
   end
 end
