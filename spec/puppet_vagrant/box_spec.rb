@@ -5,7 +5,7 @@ require 'puppet_vagrant/box'
 describe PuppetVagrant::Box do
 
   let(:manifest) { double('Manifest') }
-  let(:box) { described_class.new }
+  let(:box) { described_class.new('default') }
   
   before do 
     allow_message_expectations_on_nil

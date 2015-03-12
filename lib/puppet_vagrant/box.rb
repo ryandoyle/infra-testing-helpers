@@ -1,7 +1,7 @@
 module PuppetVagrant
   class PuppetApplyFailed < StandardError; end
   class Box
-    def initialize(name='default')
+    def initialize(name)
       @name = name
     end
 
