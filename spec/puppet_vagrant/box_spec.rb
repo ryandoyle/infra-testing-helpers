@@ -5,30 +5,30 @@ require 'puppet_vagrant/box'
 describe PuppetVagrant::Box do
 
   let(:manifest) { double('Manifest') }
-  let(:box) { described_class.new('default') }
+  let(:box) { described_class.new('default', '/vagrant') }
   
   before do 
     allow_message_expectations_on_nil
     allow($?).to receive(:exitstatus).and_return(0)
-    allow(manifest).to receive(:module_path).and_return('/manifest/path')
-    allow(manifest).to receive(:path).and_return('/manifest_to_apply.pp')
+    allow(manifest).to receive(:module_path).and_return('modules/')
+    allow(manifest).to receive(:path).and_return('manifest_to_apply.pp')
   end
 
   describe '#apply' do
 
     it 'successfully applies a manifest to the box' do
-      expect(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /manifest/path /manifest_to_apply.pp').and_return(0)
+      expect(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/ /vagrant/manifest_to_apply.pp').and_return(0)
       box.apply(manifest)
     end
 
     it 'successfully applies a manifest to the box and deals with weird exit codes' do
-      expect(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /manifest/path /manifest_to_apply.pp').and_return(2)
+      expect(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/ /vagrant/manifest_to_apply.pp').and_return(2)
       box.apply(manifest)
     end
     
 
     it 'raises a PuppetVagrant::PuppetApplyFailed error if the puppet apply fails' do
-      allow(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /manifest/path /manifest_to_apply.pp').and_return(1)
+      expect(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/ /vagrant/manifest_to_apply.pp').and_return(1)
       expect{box.apply(manifest)}.to raise_error(PuppetVagrant::PuppetApplyFailed)
     end
   end
@@ -40,7 +40,7 @@ describe PuppetVagrant::Box do
     end
 
     it 'runs the command on the box with the box name' do
-      box = described_class.new('somebox')
+      box = described_class.new('somebox', '/vagrant')
       expect(box).to receive(:system).with('vagrant ssh somebox --command "some_command"')
       box.run_command('some_command')
     end
@@ -59,7 +59,7 @@ describe PuppetVagrant::Box do
     end
 
     it 'has a name if specified' do
-      box = described_class.new('somebox')
+      box = described_class.new('somebox', '/vagrant')
       expect(box.name).to eql 'somebox'
     end
 
