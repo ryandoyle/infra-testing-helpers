@@ -3,6 +3,7 @@ require 'spec_helper'
 require 'serverspec'
 require 'net/ssh'
 require 'tempfile'
+require 'puppet_vagrant'
 
 set :backend, :ssh
 

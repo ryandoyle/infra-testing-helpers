@@ -9,7 +9,7 @@ module PuppetVagrant
     attr_reader :name
 
     def apply(manifest)
-      exit_code = run_command("sudo puppet apply --detailed-exitcode --modulepath #{@project_mount_point}/#{manifest.module_path}", :stdin => manifest.code)
+      exit_code = run_command("sudo puppet apply --detailed-exitcode --modulepath #{@project_mount_point}/#{manifest.module_path}", :stdin => manifest.puppet_code)
       raise PuppetApplyFailed unless exit_code == 0 or exit_code == 2
     end
 

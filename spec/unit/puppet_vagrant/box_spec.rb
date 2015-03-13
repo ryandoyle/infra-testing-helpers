@@ -11,7 +11,7 @@ describe PuppetVagrant::Box do
     allow_message_expectations_on_nil
     allow($?).to receive(:exitstatus).and_return(0)
     allow(manifest).to receive(:module_path).and_return('modules/')
-    allow(manifest).to receive(:code).and_return('include some_manifest')
+    allow(manifest).to receive(:puppet_code).and_return('include some_manifest')
   end
 
   describe '#apply' do
