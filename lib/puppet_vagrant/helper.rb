@@ -4,10 +4,6 @@ require 'puppet_vagrant/site'
 module PuppetVagrant
   module Helper
 
-    def site
-      @site ||= PuppetVagrant::Site.new('', 'spec/functional/modules')
-    end
-
     def apply_manifest(manifest_code)
       site.add_manifest(manifest_code)
     end
@@ -15,6 +11,12 @@ module PuppetVagrant
     def apply_all_manifests
       box = PuppetVagrant::Box.new('default', '/vagrant')
       box.apply(site)
+    end
+
+    private
+
+    def site
+      @@site ||= PuppetVagrant::Site.new('', 'spec/functional/modules')
     end
 
   end
