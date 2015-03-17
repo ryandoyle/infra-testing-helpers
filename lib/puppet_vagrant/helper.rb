@@ -16,7 +16,7 @@ module PuppetVagrant
     private
 
     def site
-      @@site ||= PuppetVagrant::Site.new('', 'spec/functional/modules')
+      @@site ||= PuppetVagrant::Site.new('', PuppetVagrant.module_path)
     end
 
   end

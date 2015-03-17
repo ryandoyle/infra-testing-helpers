@@ -5,6 +5,8 @@ require 'net/ssh'
 require 'tempfile'
 require 'puppet_vagrant'
 
+PuppetVagrant.module_path = 'spec/functional/modules/'
+
 set :backend, :ssh
 
 host = 'default'
