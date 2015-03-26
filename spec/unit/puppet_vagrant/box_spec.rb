@@ -28,9 +28,33 @@ describe PuppetVagrant::Box do
     
 
     it 'raises a PuppetVagrant::PuppetApplyFailed error if the puppet apply fails' do
-      expect(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/',  {:stdin=>"include some_manifest"}).and_return(1)
+      allow(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/',  {:stdin=>"include some_manifest"}).and_return(1)
+
       expect{box.apply(manifest)}.to raise_error(PuppetVagrant::PuppetApplyFailed)
     end
+
+
+  end
+
+  describe '#applied?' do
+
+    it 'is false if a manifest has not been applied' do
+      expect(box.applied?).to be false
+    end
+
+    it 'is true when a manifest is applied successfully' do
+      allow(box).to receive(:run_command).and_return(0)
+      box.apply(manifest)
+
+      expect(box.applied?).to be true
+    end
+    it 'is false when a manifest is not applied successfully' do
+      allow(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/',  {:stdin=>"include some_manifest"}).and_return(1)
+      expect{box.apply(manifest)}.to raise_error(PuppetVagrant::PuppetApplyFailed)
+
+      expect(box.applied?).to be false
+    end
+
   end
 
   describe '#run_command' do
@@ -67,7 +91,6 @@ describe PuppetVagrant::Box do
       box = described_class.new('somebox', '/vagrant')
       expect(box.name).to eql 'somebox'
     end
-
   end
 
 end
