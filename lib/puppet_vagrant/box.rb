@@ -15,8 +15,8 @@ module PuppetVagrant
 
 
     def run_command(command, opts = {})
-      stdin = opts[:stdin] ? "echo '#{opts[:stdin]}' | " : ""
-      system "#{stdin}vagrant ssh #{@name} --command \"#{command}\""
+      stdin = opts[:stdin] ? " << EOF\n#{opts[:stdin]}\nEOF" : ""
+      system "vagrant ssh #{@name} --command \"#{command}\"#{stdin}"
       $?.exitstatus
     end
   

@@ -53,7 +53,7 @@ describe PuppetVagrant::Box do
     end
 
     it 'pipes stdin to the command if given' do
-      expect(box).to receive(:system).with('echo \'something\' | vagrant ssh default --command "some_command"')
+      expect(box).to receive(:system).with("vagrant ssh default --command \"some_command\" << EOF\nsomething\nEOF")
       box.run_command('some_command', :stdin => "something")
     end
   end
