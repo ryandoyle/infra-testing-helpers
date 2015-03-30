@@ -26,7 +26,7 @@ module PuppetVagrant
     end
 
     def box
-      @@box ||= PuppetVagrant::Box.new('default', '/vagrant')
+      @@box ||= PuppetVagrant::Box.new('default', PuppetVagrant.vagrant_shared_folder)
     end
 
   end

@@ -3,9 +3,18 @@ require 'puppet_vagrant/helper'
 module PuppetVagrant
 
   @settings = {
-    :module_path => 'modules/',
-    :site_pp     => '',
+    :module_path         => 'modules/',
+    :site_pp             => '',
+    :vagrant_shared_folder => '/vagrant'
   }
+
+  def self.vagrant_shared_folder
+    @settings[:vagrant_shared_folder]
+  end
+
+  def self.vagrant_shared_folder=(mount_point)
+    @settings[:vagrant_shared_folder] = mount_point
+  end
 
   def self.site_pp
     @settings[:site_pp]
