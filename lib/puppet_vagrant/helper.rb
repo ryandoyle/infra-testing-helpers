@@ -6,7 +6,7 @@ module PuppetVagrant
 
     def apply_manifest(manifest_code)
       if box.applied?
-        local_site = PuppetVagrant::Site.new('', PuppetVagrant.module_path)
+        local_site = PuppetVagrant::Site.new(PuppetVagrant.site_pp, PuppetVagrant.module_path)
         local_site.add_manifest(manifest_code)
         box.apply(local_site)
       else
@@ -22,7 +22,7 @@ module PuppetVagrant
     private
 
     def global_site
-      @@global_site ||= PuppetVagrant::Site.new('', PuppetVagrant.module_path)
+      @@global_site ||= PuppetVagrant::Site.new(PuppetVagrant.site_pp, PuppetVagrant.module_path)
     end
 
     def box

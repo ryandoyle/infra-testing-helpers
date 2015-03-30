@@ -6,6 +6,7 @@ require 'tempfile'
 require 'puppet_vagrant'
 
 PuppetVagrant.module_path = 'spec/functional/modules/'
+PuppetVagrant.site_pp = "notify {'This is my site.pp':}"
 
 set :backend, :ssh
 
