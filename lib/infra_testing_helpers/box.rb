@@ -10,9 +10,11 @@ module InfraTestingHelpers
     attr_reader :name
 
     def apply(manifest)
-      exit_code = run_command("sudo puppet apply --detailed-exitcode --modulepath #{@project_mount_point}/#{manifest.module_path}", :stdin => manifest.puppet_code)
-      raise PuppetApplyFailed unless exit_code == 0 or exit_code == 2
-      @applied = true
+      manifest.manifest_file do |file|
+        exit_code = run_command("sudo puppet apply --detailed-exitcode --modulepath #{@project_mount_point}/#{manifest.module_path} #{@project_mount_point}/#{file}")
+        raise PuppetApplyFailed unless exit_code == 0 or exit_code == 2
+        @applied = true
+      end
     end
 
     def applied?

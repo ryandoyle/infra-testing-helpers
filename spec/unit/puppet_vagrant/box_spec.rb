@@ -12,23 +12,24 @@ describe InfraTestingHelpers::Box do
     allow($?).to receive(:exitstatus).and_return(0)
     allow(manifest).to receive(:module_path).and_return('modules/')
     allow(manifest).to receive(:puppet_code).and_return('include some_manifest')
+    allow(manifest).to receive(:manifest_file).and_yield('tempfile_path.pp')
   end
 
   describe '#apply' do
 
     it 'successfully applies a manifest to the box' do
-      expect(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/',  {:stdin=>"include some_manifest"}).and_return(0)
+      expect(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/ /vagrant/tempfile_path.pp',).and_return(0)
       box.apply(manifest)
     end
 
     it 'successfully applies a manifest to the box and deals with weird exit codes' do
-      expect(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/',  {:stdin=>"include some_manifest"}).and_return(2)
+      expect(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/ /vagrant/tempfile_path.pp').and_return(2)
       box.apply(manifest)
     end
     
 
     it 'raises a InfraTestingHelpers::PuppetApplyFailed error if the puppet apply fails' do
-      allow(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/',  {:stdin=>"include some_manifest"}).and_return(1)
+      allow(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/ /vagrant/tempfile_path.pp').and_return(1)
 
       expect{box.apply(manifest)}.to raise_error(InfraTestingHelpers::PuppetApplyFailed)
     end
@@ -49,7 +50,7 @@ describe InfraTestingHelpers::Box do
       expect(box.applied?).to be true
     end
     it 'is false when a manifest is not applied successfully' do
-      allow(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/',  {:stdin=>"include some_manifest"}).and_return(1)
+      allow(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/ /vagrant/tempfile_path.pp').and_return(1)
       expect{box.apply(manifest)}.to raise_error(InfraTestingHelpers::PuppetApplyFailed)
 
       expect(box.applied?).to be false

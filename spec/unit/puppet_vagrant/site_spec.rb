@@ -4,7 +4,8 @@ require 'infra_testing_helpers/site'
 
 describe InfraTestingHelpers::Site do
 
-  let(:site) { described_class.new('site.pp code', '/some/module/path') }
+  let(:site) { described_class.new('site.pp code', '/some/module/path', '/some/project/root') }
+  let(:tempfile) { double('Tempfile') }
 
   describe '#puppet_code' do
     it 'should contain the site.pp code' do
@@ -28,6 +29,41 @@ describe InfraTestingHelpers::Site do
       site.add_manifest('include apache')
 
       expect(site.puppet_code).to include "include ntp\ninclude apache"
+    end
+  end
+
+  describe '#manifest_file' do
+    before do
+      allow(Tempfile).to receive(:new).with(['infra-testing-helpers', '.pp'], '/some/project/root').and_return tempfile
+      allow(tempfile).to receive(:close)
+      allow(tempfile).to receive(:unlink)
+      allow(tempfile).to receive(:puts)
+      allow(tempfile).to receive(:fsync)
+    end
+    it 'writes the puppet code to a tempfile' do
+      expect(tempfile).to receive(:puts).with("site.pp code\n")
+
+      site.manifest_file
+    end
+    it 'syncs the file to the filesystem' do
+      expect(tempfile).to receive(:fsync)
+
+      site.manifest_file
+    end
+    it 'yeilds the base filename of the tempfile' do 
+      allow(tempfile).to receive(:path).and_return('/tmp/tempfile_base_path.pp')
+
+      expect { |b| site.manifest_file(&b) }.to yield_with_args('tempfile_base_path.pp')
+    end
+    it 'closes the file after yielding' do
+      expect(tempfile).to receive(:close)
+
+      site.manifest_file
+    end
+    it 'closes the file after yielding' do
+      expect(tempfile).to receive(:unlink)
+
+      site.manifest_file
     end
   end
 

@@ -20,6 +20,7 @@ describe InfraTestingHelpers::Helper do
     allow(box).to receive(:applied?).and_return false
     allow(InfraTestingHelpers).to receive(:module_path)
     allow(InfraTestingHelpers).to receive(:site_pp)
+    allow(InfraTestingHelpers).to receive(:project_root)
   end
 
   describe '#apply_manifest' do

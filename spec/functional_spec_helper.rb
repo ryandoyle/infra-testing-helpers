@@ -6,7 +6,10 @@ require 'tempfile'
 require 'infra_testing_helpers'
 
 InfraTestingHelpers.module_path = 'spec/functional/modules/'
-InfraTestingHelpers.site_pp = "notify {'This is my site.pp':}"
+InfraTestingHelpers.site_pp = 'notify {"This is my site.pp":}
+$extlookup_precedence = ["hosts/%{fqdn}", "domains/%{domain}", "common"]
+'
+InfraTestingHelpers.project_root = File.expand_path(File.dirname(__FILE__) + '/../')
 
 set :backend, :ssh
 

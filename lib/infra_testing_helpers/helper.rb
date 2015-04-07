@@ -6,7 +6,7 @@ module InfraTestingHelpers
 
     def apply_manifest(manifest_code)
       if box.applied?
-        local_site = InfraTestingHelpers::Site.new(InfraTestingHelpers.site_pp, InfraTestingHelpers.module_path)
+        local_site = InfraTestingHelpers::Site.new(InfraTestingHelpers.site_pp, InfraTestingHelpers.module_path, InfraTestingHelpers.project_root)
         local_site.add_manifest(manifest_code)
         box.apply(local_site)
       else
@@ -22,7 +22,7 @@ module InfraTestingHelpers
     private
 
     def global_site
-      @@global_site ||= InfraTestingHelpers::Site.new(InfraTestingHelpers.site_pp, InfraTestingHelpers.module_path)
+      @@global_site ||= InfraTestingHelpers::Site.new(InfraTestingHelpers.site_pp, InfraTestingHelpers.module_path, InfraTestingHelpers.project_root)
     end
 
     def box

@@ -5,7 +5,8 @@ module InfraTestingHelpers
   @settings = {
     :module_path         => 'modules/',
     :site_pp             => '',
-    :vagrant_shared_folder => '/vagrant'
+    :vagrant_shared_folder => '/vagrant',
+    :project_root => nil,
   }
 
   def self.vagrant_shared_folder
@@ -30,6 +31,14 @@ module InfraTestingHelpers
 
   def self.module_path=(path)
     @settings[:module_path] = path
+  end
+
+  def self.project_root
+    @settings[:project_root] or raise 'project_root has not been set'
+  end
+
+  def self.project_root=(path)
+    @settings[:project_root] = path
   end
 
 end
