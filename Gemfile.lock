@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    infra-testing-helpers (0.0.1)
-      rspec (~> 3)
+    infra-testing-helpers (0.0.2)
+      rspec
 
 GEM
   remote: https://rubygems.org/
