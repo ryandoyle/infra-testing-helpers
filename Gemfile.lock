@@ -1,3 +1,9 @@
+PATH
+  remote: .
+  specs:
+    infra-testing-helpers (0.0.1)
+      rspec (~> 3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -6,6 +12,7 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.2)
+    rake (10.3.2)
     rspec (3.2.0)
       rspec-core (~> 3.2.0)
       rspec-expectations (~> 3.2.0)
@@ -35,5 +42,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  rspec
-  serverspec
+  infra-testing-helpers!
+  rake (~> 10)
+  serverspec (~> 2)
