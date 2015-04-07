@@ -1,6 +1,6 @@
-require 'puppet_vagrant/helper'
+require 'infra_testing_helpers/helper'
 
-module PuppetVagrant
+module InfraTestingHelpers
 
   @settings = {
     :module_path         => 'modules/',
@@ -34,7 +34,7 @@ module PuppetVagrant
 
 end
 
-include PuppetVagrant::Helper
+include InfraTestingHelpers::Helper
 
 RSpec.configure do |c|
   c.before(:suite)   { apply_all_manifests }

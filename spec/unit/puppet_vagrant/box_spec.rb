@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-require 'puppet_vagrant/box'
+require 'infra_testing_helpers/box'
 
-describe PuppetVagrant::Box do
+describe InfraTestingHelpers::Box do
 
   let(:manifest) { double('Manifest') }
   let(:box) { described_class.new('default', '/vagrant') }
@@ -27,10 +27,10 @@ describe PuppetVagrant::Box do
     end
     
 
-    it 'raises a PuppetVagrant::PuppetApplyFailed error if the puppet apply fails' do
+    it 'raises a InfraTestingHelpers::PuppetApplyFailed error if the puppet apply fails' do
       allow(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/',  {:stdin=>"include some_manifest"}).and_return(1)
 
-      expect{box.apply(manifest)}.to raise_error(PuppetVagrant::PuppetApplyFailed)
+      expect{box.apply(manifest)}.to raise_error(InfraTestingHelpers::PuppetApplyFailed)
     end
 
 
@@ -50,7 +50,7 @@ describe PuppetVagrant::Box do
     end
     it 'is false when a manifest is not applied successfully' do
       allow(box).to receive(:run_command).with('sudo puppet apply --detailed-exitcode --modulepath /vagrant/modules/',  {:stdin=>"include some_manifest"}).and_return(1)
-      expect{box.apply(manifest)}.to raise_error(PuppetVagrant::PuppetApplyFailed)
+      expect{box.apply(manifest)}.to raise_error(InfraTestingHelpers::PuppetApplyFailed)
 
       expect(box.applied?).to be false
     end

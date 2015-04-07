@@ -1,24 +1,25 @@
 require 'spec_helper'
 
-require 'puppet_vagrant/helper'
+require 'infra_testing_helpers/helper'
 
-class TestPuppetVagrantHelper
-  include PuppetVagrant::Helper
+class TestInfraTestingHelper
+  include InfraTestingHelpers::Helper
 end
 
-describe PuppetVagrant::Helper do 
+describe InfraTestingHelpers::Helper do 
 
-  let(:helper) { TestPuppetVagrantHelper.new }
+  let(:helper) { TestInfraTestingHelper.new }
   let(:global_site) { double('Global Site') }
   let(:local_site) { double('Local Site') }
-  let(:box) { double('PuppetVagrant::Box') }
+  let(:box) { double('InfraTestingHelpers::Box') }
 
 
   before do
     allow(helper).to receive(:global_site).and_return global_site
     allow(helper).to receive(:box).and_return box
     allow(box).to receive(:applied?).and_return false
-    allow(PuppetVagrant).to receive(:module_path)
+    allow(InfraTestingHelpers).to receive(:module_path)
+    allow(InfraTestingHelpers).to receive(:site_pp)
   end
 
   describe '#apply_manifest' do
@@ -30,7 +31,7 @@ describe PuppetVagrant::Helper do
 
     it 'applies the manifest straight away if it was previously applied' do
       allow(box).to receive(:applied?).and_return true 
-      allow(PuppetVagrant::Site).to receive(:new).and_return local_site
+      allow(InfraTestingHelpers::Site).to receive(:new).and_return local_site
       allow(local_site).to receive(:add_manifest)
 
       expect(box).to receive(:apply).with(local_site)

@@ -1,4 +1,4 @@
-module PuppetVagrant
+module InfraTestingHelpers
   class Site
 
     def initialize(site_code, module_path)

@@ -1,4 +1,4 @@
-module PuppetVagrant
+module InfraTestingHelpers
   class PuppetApplyFailed < StandardError; end
   class Box
     def initialize(name, project_mount_point)

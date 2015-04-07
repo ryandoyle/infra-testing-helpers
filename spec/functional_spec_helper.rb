@@ -3,10 +3,10 @@ require 'spec_helper'
 require 'serverspec'
 require 'net/ssh'
 require 'tempfile'
-require 'puppet_vagrant'
+require 'infra_testing_helpers'
 
-PuppetVagrant.module_path = 'spec/functional/modules/'
-PuppetVagrant.site_pp = "notify {'This is my site.pp':}"
+InfraTestingHelpers.module_path = 'spec/functional/modules/'
+InfraTestingHelpers.site_pp = "notify {'This is my site.pp':}"
 
 set :backend, :ssh
 

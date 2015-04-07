@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-require 'puppet_vagrant/site'
+require 'infra_testing_helpers/site'
 
-describe PuppetVagrant::Site do
+describe InfraTestingHelpers::Site do
 
   let(:site) { described_class.new('site.pp code', '/some/module/path') }
 
