@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "infra-testing-helpers"
-  spec.version       = '0.0.3'
+  spec.version       = '0.0.4'
   spec.authors       = ["Ryan Doyle"]
   spec.email         = ["ryan@doylenet.net"]
   spec.summary       = %q{Integrations with RSpec, Puppet and Vagrant to help infrastructure testing}

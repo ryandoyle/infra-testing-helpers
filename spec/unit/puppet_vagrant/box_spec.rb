@@ -5,14 +5,14 @@ require 'infra_testing_helpers/box'
 describe InfraTestingHelpers::Box do
 
   let(:manifest) { double('Manifest') }
-  let(:box) { described_class.new('default', '/vagrant') }
+  let(:box) { described_class.new('default') }
   
   before do 
     allow_message_expectations_on_nil
     allow($?).to receive(:exitstatus).and_return(0)
-    allow(manifest).to receive(:module_path).and_return('modules/')
+    allow(manifest).to receive(:module_path).and_return('/vagrant/modules/')
     allow(manifest).to receive(:puppet_code).and_return('include some_manifest')
-    allow(manifest).to receive(:manifest_file).and_yield('tempfile_path.pp')
+    allow(manifest).to receive(:manifest_file).and_yield('/vagrant/tempfile_path.pp')
   end
 
   describe '#apply' do
@@ -65,7 +65,7 @@ describe InfraTestingHelpers::Box do
     end
 
     it 'runs the command on the box with the box name' do
-      box = described_class.new('somebox', '/vagrant')
+      box = described_class.new('somebox')
       expect(box).to receive(:system).with('vagrant ssh somebox --command "some_command"')
       box.run_command('some_command')
     end
@@ -89,7 +89,7 @@ describe InfraTestingHelpers::Box do
     end
 
     it 'has a name if specified' do
-      box = described_class.new('somebox', '/vagrant')
+      box = described_class.new('somebox')
       expect(box.name).to eql 'somebox'
     end
   end

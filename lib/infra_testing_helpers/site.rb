@@ -3,14 +3,22 @@ require 'tempfile'
 module InfraTestingHelpers
   class Site
 
-    def initialize(site_code, module_path, project_root)
+    def initialize(site_code, module_path, project_root, project_mount_point)
       @site_code = site_code
       @module_path = module_path
       @project_root = project_root
+      @project_mount_point = project_mount_point
       @manifest_code = ""
     end
 
     attr_reader :module_path
+
+    def module_path
+      @module_path.inject('') do |memo, path|
+        memo << "#{@project_mount_point}/#{path}:"
+        memo
+      end[0...-1]
+    end
 
     def add_manifest(manifest)
       @manifest_code << "#{manifest}\n"
@@ -21,7 +29,7 @@ module InfraTestingHelpers
       begin
         file.puts puppet_code
         file.fsync
-        yield(File.basename(file.path)) if block_given?
+        yield("#{@project_mount_point}/#{File.basename(file.path)}") if block_given?
       ensure 
         file.close
         file.unlink

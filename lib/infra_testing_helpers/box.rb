@@ -1,9 +1,8 @@
 module InfraTestingHelpers
   class PuppetApplyFailed < StandardError; end
   class Box
-    def initialize(name, project_mount_point)
+    def initialize(name)
       @name = name
-      @project_mount_point = project_mount_point
       @applied = false
     end
 
@@ -11,7 +10,7 @@ module InfraTestingHelpers
 
     def apply(manifest)
       manifest.manifest_file do |file|
-        exit_code = run_command("sudo puppet apply --detailed-exitcode --modulepath #{@project_mount_point}/#{manifest.module_path} #{@project_mount_point}/#{file}")
+        exit_code = run_command("sudo puppet apply --detailed-exitcode --modulepath #{manifest.module_path} #{file}")
         raise PuppetApplyFailed unless exit_code == 0 or exit_code == 2
         @applied = true
       end

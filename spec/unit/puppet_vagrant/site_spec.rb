@@ -4,7 +4,7 @@ require 'infra_testing_helpers/site'
 
 describe InfraTestingHelpers::Site do
 
-  let(:site) { described_class.new('site.pp code', '/some/module/path', '/some/project/root') }
+  let(:site) { described_class.new('site.pp code', ['modules', 'other_modules'], '/some/project/root', '/vagrant') }
   let(:tempfile) { double('Tempfile') }
 
   describe '#puppet_code' do
@@ -32,6 +32,12 @@ describe InfraTestingHelpers::Site do
     end
   end
 
+  describe '#module_path' do
+    it 'returns the module path as a flattened path' do
+      expect(site.module_path).to eql '/vagrant/modules:/vagrant/other_modules'
+    end
+  end
+
   describe '#manifest_file' do
     before do
       allow(Tempfile).to receive(:new).with(['infra-testing-helpers', '.pp'], '/some/project/root').and_return tempfile
@@ -53,7 +59,7 @@ describe InfraTestingHelpers::Site do
     it 'yeilds the base filename of the tempfile' do 
       allow(tempfile).to receive(:path).and_return('/tmp/tempfile_base_path.pp')
 
-      expect { |b| site.manifest_file(&b) }.to yield_with_args('tempfile_base_path.pp')
+      expect { |b| site.manifest_file(&b) }.to yield_with_args('/vagrant/tempfile_base_path.pp')
     end
     it 'closes the file after yielding' do
       expect(tempfile).to receive(:close)

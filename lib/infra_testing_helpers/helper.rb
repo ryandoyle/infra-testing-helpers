@@ -6,7 +6,7 @@ module InfraTestingHelpers
 
     def apply_manifest(manifest_code)
       if box.applied?
-        local_site = InfraTestingHelpers::Site.new(InfraTestingHelpers.site_pp, InfraTestingHelpers.module_path, InfraTestingHelpers.project_root)
+        local_site = InfraTestingHelpers::Site.new(InfraTestingHelpers.site_pp, InfraTestingHelpers.module_path, InfraTestingHelpers.project_root, InfraTestingHelpers.vagrant_shared_folder)
         local_site.add_manifest(manifest_code)
         box.apply(local_site)
       else
@@ -22,11 +22,11 @@ module InfraTestingHelpers
     private
 
     def global_site
-      @@global_site ||= InfraTestingHelpers::Site.new(InfraTestingHelpers.site_pp, InfraTestingHelpers.module_path, InfraTestingHelpers.project_root)
+      @@global_site ||= InfraTestingHelpers::Site.new(InfraTestingHelpers.site_pp, InfraTestingHelpers.module_path, InfraTestingHelpers.project_root, InfraTestingHelpers.vagrant_shared_folder)
     end
 
     def box
-      @@box ||= InfraTestingHelpers::Box.new('default', InfraTestingHelpers.vagrant_shared_folder)
+      @@box ||= InfraTestingHelpers::Box.new('default')
     end
 
   end
