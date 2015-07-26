@@ -42,9 +42,9 @@ describe 'apache' do
   describe 'worker mode' do
     before do
       apply_manifest 'class {"apache": mpm => "worker"}'
-      describe process('httpd.woker') do
-        it { should be_running }
-      end
+    end
+    describe process('httpd.woker') do
+      it { should be_running }
     end
   end
   
