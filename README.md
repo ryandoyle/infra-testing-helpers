@@ -65,4 +65,4 @@ Finished in 6.92 seconds (files took 5.05 seconds to load)
 
 `apply_manifest` will apply Puppet code differently depending on the scope in which it is called. In the global rspec scope, it will apply the manifests before running any tests. If you have multiple specs with `apply_manifest` in the global scope, they are lazily evaluated and run as a single puppet apply. This helps speed up Puppet runs and can detect duplicate resource definitions.
 
-When `apply_manifests` is run within a `before` block it is applied instantly. This is useful for testing manifests that can not co-exist with others or for testing different arguments to the same manifest.
+When `apply_manifests` is run within a `before` block it is applied when the block is evaluated. This is useful for testing manifests that can not co-exist with others or for testing different arguments to the same manifest.
